@@ -43,14 +43,14 @@ const FhirView = React.createClass({
     </div>));
     if (this.props.all.getIn(['decisions', 'fhir'])){
       return (
-        <div className="fhir-view {this.state.shouldHide ? '' : 'fhir-view-visible'}">
+        <div className={this.state.shouldHide ? 'fhir-view' : 'fhir-view fhir-view-visible'}>
           <a className="configure-fhir-view" onClick={this.clickShowHide}>Context</a>
           <pre className={this.state.shouldHide ? 'hidden' : ''}>{output}</pre>
 
         </div>
       );
     } else {
-      return (<div className="fhir-view"><pre className="fhir-text"><div className="line">(No CDS Hook <i>context resources</i> required.)</div></pre></div>)
+      return (<div className="fhir-view fhir-view-visible"><pre className="fhir-text"><div className="line">(No CDS Hook <i>context resources</i> required.)</div></pre></div>)
     }
   },
 
