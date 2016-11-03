@@ -43,7 +43,7 @@ const FhirView = React.createClass({
     </div>));
     if (this.props.all.getIn(['decisions', 'fhir'])){
       return (
-        <div className="fhir-view">
+        <div className="fhir-view {this.state.shouldHide ? '' : 'fhir-view-visible'}">
           <a className="configure-fhir-view" onClick={this.clickShowHide}>Context</a>
           <pre className={this.state.shouldHide ? 'hidden' : ''}>{output}</pre>
 
