@@ -10,6 +10,7 @@ import { getIn, paramsToJson } from '../../../mock-cds-backend/utils.js'
 import CDS_SMART_OBJ from '../../smart_authentication';
 import $ from 'jquery';
 import queryString from 'query-string';
+import clientId from '../../sandbox-client-id';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher')
 var JWT = require('jsrsasign');
@@ -156,7 +157,8 @@ function hookBody(h, fhir, prefetch) {
       scope: CDS_SMART_OBJ.accessToken.scope,
       token_type: 'Bearer',
       expires_in: CDS_SMART_OBJ.accessToken.expires_in,
-      access_token: CDS_SMART_OBJ.accessToken.access_token
+      access_token: CDS_SMART_OBJ.accessToken.access_token,
+      subject: clientId
     }
   }
   if (fhir)
