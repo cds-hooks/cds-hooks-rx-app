@@ -264,7 +264,7 @@ function callHooks(localState) {
       return ret.resolve(buildJwt(hookUrl, window.sessionStorage['privatePem']));
     } else {
       $.ajax({
-        url: 'https://raw.githubusercontent.com/cerner/cds-hooks-sandbox/master/ecprivatekey.pem',
+        url: 'https://raw.githubusercontent.com/cds-hooks/sandbox/master/ecprivatekey.pem',
         success: function(data) {
           window.sessionStorage['privatePem'] = data;
           return ret.resolve(buildJwt(hookUrl, data))
