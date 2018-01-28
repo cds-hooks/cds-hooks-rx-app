@@ -22,7 +22,10 @@ module.exports = {
 // recommending can, alternatively, return a single "decision" indicating a user-approved choice.
 
 function recommend(data) {
-  var lowerPrice = data.context[0]
+  if (!(data && data.context && data.context['medications'] && data.context['medications'][0])) {
+    return {};
+  }
+  var lowerPrice = data.context['medications'][0];
   if (!lowerPrice.medicationCodeableConcept) {
     return {}
   }

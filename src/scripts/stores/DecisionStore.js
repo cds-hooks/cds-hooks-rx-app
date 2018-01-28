@@ -148,7 +148,9 @@ function hookBody(h, fhir, prefetch) {
     redirect: _base + "service-done.html",
     user: FhirServerStore.getState().getIn(['context', 'user']) || "Practitioner/example",
     patient: state.get('patient'),
-    context: [],
+    context: {
+      patientId: state.get('patient'),
+    },
     prefetch: h.get('prefetch', Immutable.Map())
                .map(v => prefetch.get(v))
   };
@@ -161,8 +163,11 @@ function hookBody(h, fhir, prefetch) {
       subject: clientId
     }
   }
-  if (fhir)
-    ret.context.push(fhir);
+  if (fhir) {
+    Object.keys(state.get('fhir')).forEach((key) => {
+      ret.context[key] = state.get('fhir')[key];
+    });
+  }
 
   var serviceRequest = Immutable.fromJS({
     request: Immutable.fromJS(ret),
@@ -300,7 +305,7 @@ function callHooks(localState) {
               url: h.get('url'),
               method: 'post',
               data: hookBody(h,
-                localState.get('fhir') && localState.get('fhir').toJS(),
+                localState.get('fhir'),
                 prefetch),
               headers: {
                 'Authorization': 'Bearer ' + val,
@@ -349,7 +354,13 @@ var DecisionStore = assign({}, EventEmitter.prototype, {
 
     if (!Immutable.is(resource, state.get('fhir'))) {
       state = state.set('serviceRequestBody', state.get('serviceRequestBody') || resource);
-      state = state.set('fhir', resource)
+      if (hook === 'medication-prescribe') {
+        state = state.set('fhir', {
+          medications: [ resource.toJS() ]
+        });
+      } else {
+        state = state.set('fhir', resource);
+      }
       state = state.set('cards', Immutable.List())
       if (CDS_SMART_OBJ.processedContext) {
         setTimeout(() => callHooks(state), DELAY)
